@@ -6,3 +6,4 @@ LackOff.initialize(const MyApp());
 
 
 ![img.png](img.png)https://github.com/aniu7532/lack_off_bebug_logs/blob/0.0.2/1730363514776.jpg
+![img.png](https://raw.githubusercontent.com/aniu7532/lack_off_bebug_logs/0.0.2/1730363514776.jpg)
