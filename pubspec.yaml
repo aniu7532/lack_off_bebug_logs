@@ -1,14 +1,19 @@
 name: lack_off_debug_logs
 description: A Flutter package for implementing a custom logging tool that captures global exceptions and network requests.
-version: 0.0.6
+version: 0.0.7
 homepage:
 
 environment:
+  #停留在这个版本主要是为了兼容鸿蒙
   sdk: '>=2.19.6 <3.0.0'
-  flutter: ">=1.17.0"
+  flutter: ">=3.0.0"
 
 dependencies:
-  sqflite: 2.2.8
+  sqflite:
+    git:
+      url: "https://gitee.com/openharmony-sig/flutter_sqflite.git"
+      path: "sqflite"
+
   path: 1.8.2
   flutter:
     sdk: flutter

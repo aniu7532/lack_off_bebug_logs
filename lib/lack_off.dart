@@ -1,40 +1,36 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:lack_off_debug_logs/app_exception_util.dart';
-import 'package:lack_off_debug_logs/lack_floating_button.dart';
-import 'package:lack_off_debug_logs/log_database.dart';
+import 'package:lack_off_debug_logs/lack_off_app_exception_util.dart';
+import 'package:lack_off_debug_logs/lack_off_floating_window.dart';
+import 'package:lack_off_debug_logs/lack_off_bean.dart';
+import 'package:lack_off_debug_logs/lack_off_log_database.dart';
 
 class LackOff {
   static void initialize(
     Widget app,
   ) async {
-    await loadLogsFromDb(); // 加载本地日志
+    /// 加载本地日志
+    await loadLogsFromDb();
+
+    /// 异常捕获
     AppCatchError.run(app);
   }
 
-  static void show(
+  static void showLackOffButton(
     BuildContext context,
   ) {
-    LackFloatingButton.show(context);
+    LackOffFloatingWindow.show(context);
   }
 
-  static final List<Map<String, dynamic>> _logs = [];
-  static final StreamController<List<Map<String, dynamic>>> _logController =
+  static final List<LackOffBean> _logs = [];
+  static final StreamController<List<LackOffBean>> _logController =
       StreamController.broadcast();
 
   // 获取日志的 Stream
-  static Stream<List<Map<String, dynamic>>> get logStream =>
-      _logController.stream;
+  static Stream<List<LackOffBean>> get logStream => _logController.stream;
 
-  // 添加日志并触发更新
-  //{
-  //    'type': '1',
-  //    'message': details.exception.toString(),
-  //    'stack': details.stack.toString(),
-  //    'date': DateTime.now().toString(),
-  // }
-  static void addLog(Map<String, dynamic> log) async {
+  static void addLog(LackOffBean log) async {
     _logs.insert(0, log);
     _logController.add(List.from(_logs)); // 发送更新
     if (true) {
@@ -45,7 +41,7 @@ class LackOff {
   }
 
   // 获取所有日志
-  static List<Map> getLogs() => List.from(_logs);
+  static List<LackOffBean> getLogs() => List.from(_logs);
 
   // 清理 StreamController
   static void dispose() {

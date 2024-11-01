@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:lack_off_debug_logs/lack_off_bean.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
@@ -37,29 +38,32 @@ class LogDatabaseHelper {
     );
   }
 
-  Future<void> insertLog(Map<String, dynamic> log) async {
+  Future<void> insertLog(LackOffBean log) async {
     final db = await database;
     await db.insert(
       'logs',
-      log,
+      log.toJson(),
       conflictAlgorithm: ConflictAlgorithm.replace,
     );
   }
 
-  Future<List<Map<String, dynamic>>> fetchAllLogs() async {
+  Future<List<LackOffBean>> fetchAllLogs() async {
     final db = await database;
-    return await db.query('logs', orderBy: "date DESC");
+    final List<Map<String, dynamic>> logs =
+        await db.query('logs', orderBy: "date DESC");
+    return logs.map((log) => LackOffBean.fromJson(log)).toList();
   }
 
-  Future<List<Map<String, dynamic>>> fetchLogsByDate(
+  Future<List<LackOffBean>> fetchLogsByDate(
       String startDate, String endDate) async {
     final db = await database;
-    return await db.query(
+    final List<Map<String, dynamic>> logs = await db.query(
       'logs',
       where: 'date BETWEEN ? AND ?',
       whereArgs: [startDate, endDate],
       orderBy: "date DESC",
     );
+    return logs.map((log) => LackOffBean.fromJson(log)).toList();
   }
 
   Future<void> clearLogs() async {

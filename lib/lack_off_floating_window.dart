@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:lack_off_debug_logs/lack_off.dart';
+import 'package:lack_off_debug_logs/lack_off_bean.dart';
+import 'package:lack_off_debug_logs/lack_off_log_type.dart';
 
 ///
 /// 悬浮按钮
 ///
-class LackFloatingButton {
+class LackOffFloatingWindow {
   static OverlayEntry? overlayEntry;
-  static Offset position = Offset.zero; // 添加初始位置
+  static Offset position = Offset.zero;
   static bool openLogWindow = false;
   static show(BuildContext context) {
     final overlayState = Overlay.of(context);
@@ -30,7 +32,7 @@ class LackFloatingButton {
                     BorderSide(color: Colors.orangeAccent, width: 16),
                   ),
                 ),
-                child: StreamBuilder<List<Map>>(
+                child: StreamBuilder<List<LackOffBean>>(
                   stream: LackOff.logStream,
                   initialData: LackOff.getLogs(),
                   builder: (context, snapshot) {
@@ -41,12 +43,12 @@ class LackFloatingButton {
                     return ListView.builder(
                       itemCount: logs.length,
                       itemBuilder: (context, index) {
-                        final map = logs[index];
+                        final log = logs[index];
 
                         return Card(
-                          color: map['type'] == '1'
+                          color: log.logType == LogType.flutterRuntime
                               ? Colors.orange.withOpacity(0.5)
-                              : (map['type'] == '2'
+                              : (log.logType == LogType.dartRuntime
                                   ? Colors.red.withOpacity(0.5)
                                   : Colors.lightBlueAccent.withOpacity(0.5)),
                           child: Column(
@@ -59,7 +61,7 @@ class LackFloatingButton {
                                 onPressed: () {
                                   Clipboard.setData(ClipboardData(
                                       text:
-                                          '${map['date']}\n${map['message']}\n${map['stack']}'));
+                                          '${log.date}\n${log.logTitle}\n${log.logDetail}'));
                                 },
                                 icon: const Icon(Icons.copy),
                               ),
@@ -67,7 +69,7 @@ class LackFloatingButton {
                                 height: 2,
                               ),
                               SelectableText(
-                                map['date'],
+                                log.date,
                                 style: const TextStyle(
                                   color: Colors.white60,
                                   fontSize: 16,
@@ -77,7 +79,7 @@ class LackFloatingButton {
                                 height: 2,
                               ),
                               SelectableText(
-                                map['message'],
+                                log.logTitle,
                                 style: const TextStyle(
                                   color: Colors.white60,
                                   fontSize: 16,
@@ -86,7 +88,7 @@ class LackFloatingButton {
                               const SizedBox(
                                 height: 2,
                               ),
-                              SelectableText(map['stack']),
+                              SelectableText(log.logDetail),
                               const SizedBox(
                                 height: 2,
                               ),
@@ -104,10 +106,8 @@ class LackFloatingButton {
               right: position.dx + 20,
               child: GestureDetector(
                 onPanUpdate: (details) {
-                  // 更新位置
                   final dx = position.dx - details.delta.dx;
                   final dy = position.dy - details.delta.dy;
-                  debugPrint('dx:$dx,dy:$dy   width:$width,height:$height');
                   if (dx > 0 &&
                       dy > 0 &&
                       dx < (width - 70) &&
