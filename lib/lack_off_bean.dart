@@ -5,14 +5,14 @@ class LackOffBean {
   String logTitle;
   String logDetail;
   String date;
-  bool updated;
+  String updated;
 
   LackOffBean({
     required this.logType,
     required this.logTitle,
     required this.logDetail,
     required this.date,
-    this.updated = false,
+    this.updated = 'false',
   });
 
   String _logTypeToString(LogType type) {
@@ -41,7 +41,7 @@ class LackOffBean {
       logTitle: json['logTitle'] as String,
       logDetail: json['logDetail'] as String,
       date: json['date'] as String,
-      updated: json['updated'] as bool,
+      updated: json['updated'] as String,
     );
   }
 
