@@ -27,7 +27,7 @@ logDetail: '',
 date: DateTime.now().toString(),
 ));
 
-
+鸿蒙next 模拟器
 ![img.gif](https://github.com/aniu7532/lack_off_bebug_logs/blob/0.0.2/Nov-04-2024%2014-08-07.gif)
-![img.png](img.png)https://github.com/aniu7532/lack_off_bebug_logs/blob/0.0.2/1730363514776.jpg
+
 ![img.png](https://raw.githubusercontent.com/aniu7532/lack_off_bebug_logs/0.0.2/1730363514776.jpg)
