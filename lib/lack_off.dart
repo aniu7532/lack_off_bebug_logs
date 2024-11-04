@@ -10,6 +10,8 @@ class LackOff {
   static void initialize(
     Widget app,
   ) async {
+    WidgetsFlutterBinding.ensureInitialized();
+
     /// 加载本地日志
     await loadLogsFromDb();
 

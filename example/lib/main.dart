@@ -1,3 +1,6 @@
+import 'dart:async';
+
+import 'package:example/dio_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:lack_off_debug_logs/lack_off.dart';
 
@@ -29,6 +32,11 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  @override
+  void didUpdateWidget(covariant MyHomePage oldWidget) {
+    super.didUpdateWidget(oldWidget);
+  }
+
   int _counter = 0;
   @override
   Widget build(BuildContext context) {
@@ -40,16 +48,48 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
-            ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headlineMedium,
-            ),
+            ElevatedButton(
+                onPressed: () {
+                  LackOff.showLackOffButton(context);
+                },
+                child: const Text(
+                  'showLackOffButton',
+                )),
+            ElevatedButton(
+                onPressed: () {
+                  throw Exception('flutter runtime exception');
+                },
+                child: const Text(
+                  'flutter error',
+                )),
+            ElevatedButton(
+                onPressed: () {
+                  // 模拟一个定时器异常
+                  Timer(const Duration(seconds: 2), () {
+                    throw Exception('This is an unexpected error!');
+                  });
+                },
+                child: const Text(
+                  'dart error',
+                )),
+            ElevatedButton(
+                onPressed: () {
+                  DioUtil.instance.get();
+                },
+                child: const Text(
+                  'dio log',
+                )),
           ],
         ),
       ),
     );
+  }
+
+  Future<void> fetchData() async {
+    // 模拟网络请求延迟
+    await Future.delayed(Duration(seconds: 1));
+
+    // 抛出一个异常，例如网络请求失败
+    throw Exception('网络请求失败！');
   }
 }

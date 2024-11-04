@@ -28,10 +28,11 @@ class LogDatabaseHelper {
         await db.execute('''
           CREATE TABLE logs (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
-            type TEXT,
-            message TEXT,
-            stack TEXT,
-            date TEXT
+            logType TEXT,
+            logTitle TEXT,
+            logDetail TEXT,
+            date TEXT,
+            updated  TEXT
           )
         ''');
       },

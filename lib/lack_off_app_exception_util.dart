@@ -1,8 +1,8 @@
 import 'dart:async';
+import 'dart:isolate';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:lack_off_debug_logs/lack_off_floating_window.dart';
 import 'package:lack_off_debug_logs/lack_off.dart';
 import 'package:lack_off_debug_logs/lack_off_bean.dart';
 import 'package:lack_off_debug_logs/lack_off_log_type.dart';
@@ -39,7 +39,28 @@ class AppCatchError {
         logDetail: stack.toString(),
         date: DateTime.now().toString(),
       ));
-      LackOffFloatingWindow.refresh();
     });
+
+    /// 添加全局 Isolate 异常捕获
+    Isolate.current.addErrorListener(RawReceivePort((dynamic pair) {
+      final List<dynamic> errorAndStacktrace = pair;
+      LackOff.addLog(LackOffBean(
+        logType: LogType.dartRuntime,
+        logTitle: errorAndStacktrace.first.toString(),
+        logDetail: errorAndStacktrace.last.toString(),
+        date: DateTime.now().toString(),
+      ));
+    }).sendPort);
+
+    /// 捕获无法被 runZonedGuarded 捕获的异常 (例如 Timer 异常)
+    PlatformDispatcher.instance.onError = (error, stackTrace) {
+      LackOff.addLog(LackOffBean(
+        logType: LogType.dartRuntime,
+        logTitle: error.toString(),
+        logDetail: stackTrace.toString(),
+        date: DateTime.now().toString(),
+      ));
+      return true;
+    };
   }
 }
