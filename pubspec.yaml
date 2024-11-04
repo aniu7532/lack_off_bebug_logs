@@ -1,6 +1,6 @@
 name: lack_off_debug_logs
 description: A Flutter package for implementing a custom logging tool that captures global exceptions and network requests.
-version: 0.0.9
+version: 1.0.0
 homepage:
 
 environment:
